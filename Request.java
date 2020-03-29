@@ -7,6 +7,11 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/* 
+    @author: Frank Martinez
+    Swiss Army Knife
+    Programming Assignment 5
+*/
 
 class Request{
     private static HttpURLConnection connection;
@@ -14,19 +19,19 @@ class Request{
     protected ArrayList<String> urlList= new ArrayList<String>();
     protected StringBuffer webResponseContent;
     protected boolean parse;
-    // public Request(String tempURL){
-    //     userURL = tempURL;
-    // }
+ 
     public void URLreader(boolean json, String urlInpuString) {
+        //variables for reading/parsing text
         userURL = urlInpuString;
         parse = json;
         String line;
-         BufferedReader webReader;
+        BufferedReader webReader;
         webResponseContent = new StringBuffer();
 
         try{
-
+            //url
             URL url = new URL(userURL);
+
             //opens connection between client and server
             connection = (HttpURLConnection) url.openConnection();
 
@@ -35,8 +40,6 @@ class Request{
             connection.setConnectTimeout(4500);
             connection.setReadTimeout(5000);
 
-            int httpStatus =  connection.getResponseCode();
-            
             /*
             1xx: processing
             2xx: success
@@ -44,16 +47,20 @@ class Request{
             4xx: client error
             5xx: server error
             */
+            int httpStatus =  connection.getResponseCode();
             
+           
+            //if connection was established read the content 
             if (httpStatus <300){
                
                 webReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 while((line = webReader.readLine()) != null){
                     webResponseContent.append(line+"\n");
-                    //System.out.print(line+"\n");
+
                 }
                 webReader.close();
 
+                //parse content or call toString to print content
                 if(parse == true){
                     parseJSON(webResponseContent);
                 }else{
@@ -70,13 +77,11 @@ class Request{
 
         }
         catch(MalformedURLException e){
-            //e.printStackTrace();
             System.out.println("Malformed URL");
         }
         catch(Exception e){
             e.printStackTrace();
         }finally{
-            //System.out.println("\nlogging off...\n");
             System.out.println("\nsuccess!");
             connection.disconnect();
         }
@@ -89,6 +94,7 @@ class Request{
          while (matcher.find()){
             urlList.add(matcher.group());
          } 
+         //arraylist of our parsed URL's being executed in urlReader function
          for(String url:urlList){
              URLreader(parse, url);
          }
@@ -98,10 +104,10 @@ class Request{
     //printing the content
     public String toString(){
         String commandOutput = "\nURL "+userURL+"\n";
-        
         ArrayList<String> urlContent = new ArrayList<String>();
         String lines = "";
         System.out.print(commandOutput); 
+
         for(int i =0; i <= webResponseContent.length() - 1 ; ++i)
         {
             if(webResponseContent.charAt(i) != '\n')
@@ -117,9 +123,8 @@ class Request{
         }
         if(!lines.equals("")){
             System.out.println(lines);
-            //urlContent.add(lines);
+            
         }
-       // System.out.print(urlContent);
        return commandOutput; 
     }
 
