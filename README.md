@@ -5,5 +5,5 @@ SwissArmyKnife
 Sprint 5
 
 
-build instructions
+build instructions:
 -java sak -help 
