@@ -2,7 +2,7 @@ SwissArmyKnife
 
 @Author: Frank J. Martinez
 
-Programming Assignment 5
+Sprint 5
 
 
 build instructions
